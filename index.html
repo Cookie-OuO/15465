@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ERP刷題系統</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ERP題庫刷題</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>ERP刷題系統</h1>
-<button onclick="loadRandom()">隨機100題</button>
+<div class="header">
+<h1>ERP規劃師題庫刷題</h1>
+</div>
+<div class="menu">
+<button onclick="startExam(100)">正式考試100題</button>
+<button onclick="startExam(50)">普通模式50題</button>
 <button onclick="showWrong()">錯題集</button>
-<div id="quiz"></div>
+<button onclick="showAll()">全部題庫</button>
+</div>
+<div id="info"></div>
+<div id="app"></div>
 <script src="questions.js"></script>
 <script src="app.js"></script>
 </body>

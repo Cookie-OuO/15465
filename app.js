@@ -1,31 +1,34 @@
 
-function loadRandom(){
- let q=questions.sort(()=>Math.random()-0.5).slice(0,100);
- render(q);
+let current=[];
+function startExam(n){
+ current=[...questions].sort(()=>Math.random()-0.5).slice(0,Math.min(n,questions.length));
+ render(current);
 }
-function render(list){
- const d=document.getElementById('quiz');
- d.innerHTML='';
- list.forEach(x=>{
-   const div=document.createElement('div');
-   div.innerHTML=`<h3>${x.id}. ${x.q}</h3>`+x.options.map((o,i)=>`<label><input type="radio" name="q${x.id}" value="${i}">${o}</label><br>`).join('')+`<button onclick="check(${x.id})">送出</button><hr>`;
-   d.appendChild(div);
+function render(arr){
+ let html='';
+ arr.forEach(q=>{
+ html+=`<div class="card"><h3>${q.id}. ${q.q}</h3>`;
+ q.options.forEach((o,i)=>{
+ html+=`<label><input type="radio" name="q${q.id}" value="${i}">${o}</label><br>`;
  });
+ html+=`<button onclick="check(${q.id})">送出答案</button></div>`;
+ });
+ document.getElementById('app').innerHTML=html;
 }
 function check(id){
  const q=questions.find(x=>x.id===id);
- const s=document.querySelector(`input[name=q${id}]:checked`);
- if(!s)return alert('請選答案');
- if(Number(s.value)===q.answer) alert('答對');
+ const ans=document.querySelector('input[name=q'+id+']:checked');
+ if(!ans){alert('請選答案');return;}
+ if(+ans.value===q.answer){alert('答對');}
  else{
    alert('答錯');
-   let wrong=JSON.parse(localStorage.getItem('wrong')||'[]');
-   if(!wrong.includes(id)) wrong.push(id);
-   localStorage.setItem('wrong',JSON.stringify(wrong));
+   let w=JSON.parse(localStorage.getItem('wrong')||'[]');
+   if(!w.includes(id)) w.push(id);
+   localStorage.setItem('wrong',JSON.stringify(w));
  }
 }
 function showWrong(){
- let wrong=JSON.parse(localStorage.getItem('wrong')||'[]');
- render(questions.filter(x=>wrong.includes(x.id)));
+ let w=JSON.parse(localStorage.getItem('wrong')||'[]');
+ render(questions.filter(x=>w.includes(x.id)));
 }
-loadRandom();
+function showAll(){render(questions);}
